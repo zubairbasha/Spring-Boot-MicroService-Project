@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: CONFIG-SERVER
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/zubairbasha/config-server
+          clone-on-start: true
+          default-label: main
+  zipkin:
+    base-url:  http://127.0.0.1:9411/
+server:
+  port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+

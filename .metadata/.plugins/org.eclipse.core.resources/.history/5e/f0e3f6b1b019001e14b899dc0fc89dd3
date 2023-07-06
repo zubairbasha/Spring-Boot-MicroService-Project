@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: CONFIG-SERVER
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/zubairbasha/Config-server-Repo/
+          clone-on-start: true
+          default-label: main
+server:
+  port: 8080

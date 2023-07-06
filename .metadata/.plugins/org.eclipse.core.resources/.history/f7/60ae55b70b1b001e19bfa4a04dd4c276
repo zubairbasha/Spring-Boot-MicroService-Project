@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ORGANISATION-SERVICE
+  datasource:
+    url: jdbc:mysql://{DB_HOST:localhost}:3306/organisation_db
+    username: root
+    password: Admin@1234
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+server:
+  port: 9095

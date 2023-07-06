@@ -1,0 +1,58 @@
+package com.departmentservice.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.departmentservice.dto.DepartmentDto;
+import com.departmentservice.service.DepartmentService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@RestController
+@RequestMapping("/api/department/")
+@RefreshScope
+@Tag(
+		name = "Department Service - Department Controller",
+		description = "This is a Department Controller Rest API"
+		)
+public class DepartmentController {
+	@Autowired
+	private DepartmentService departmentService;
+	@Value("${message.value}")
+	private String message;
+	//Build Save Department REST API
+	@PostMapping(value = "/savedepartment")
+	@Operation(
+			summary = "Save Department Rest API",
+			description = "Save Department Rest APi is used to save Object in a database"
+			)
+	@ApiResponse(
+			responseCode = "201",
+			description = "HTTP Status 201 Created"
+			)
+	public ResponseEntity<DepartmentDto> saveDepartment(@RequestBody DepartmentDto department){
+		DepartmentDto savedDepartment= departmentService.saveDepartment(department);
+		return new ResponseEntity<>(savedDepartment,HttpStatus.CREATED);
+	}
+	@GetMapping("/hello")
+	public String hello() {
+		return message;
+	}
+	//Build get department rest api
+	@GetMapping(value = "/getdepartment/{departmentcode}")
+	public ResponseEntity<DepartmentDto> getDepartment(@PathVariable("departmentcode") String code){
+		DepartmentDto department=departmentService.getDepartmentByCode(code);
+		return new ResponseEntity<>(department,HttpStatus.OK);
+	}
+}

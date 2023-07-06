@@ -1,0 +1,12 @@
+package com.employeeservice.client;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.employeeservice.dto.OrganisationDto;
+
+@FeignClient(name = "ORGANISATION-SERVICE")
+public interface OrganisationClientService {
+	@GetMapping("/api/organisation/getorganisation/{code}")
+	OrganisationDto getOrganisation(String organisationCode);
+}

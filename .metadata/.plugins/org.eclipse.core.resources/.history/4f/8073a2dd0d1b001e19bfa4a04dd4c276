@@ -1,0 +1,5 @@
+package com.organisationservice.mapper;
+
+public class OrganisationMapper {
+
+}

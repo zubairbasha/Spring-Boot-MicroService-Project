@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: API-GATEWAY
+server:
+  port: 9071
+  cloud:
+    gateway:
+      routes:
+      - id: EMPLOYEE-SERVICE
+        uri: lb://EMPLOYEE-SERVICE
+        predicates:
+        - Path=/api/employees
+eureka:
+  instance:
+    client:
+      serverUrl:
+        defaultZone=http://localhost:8071/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    
+        
+        
+      

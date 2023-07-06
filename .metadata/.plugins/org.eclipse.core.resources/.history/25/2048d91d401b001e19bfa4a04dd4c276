@@ -1,0 +1,21 @@
+package com.departmentservice.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(
+		description = "This is a Department Dto"
+		)
+public class DepartmentDto {
+	private Long id;
+	private String departmentName;
+	private String departmentDescription;
+	private String departmentCode;
+}

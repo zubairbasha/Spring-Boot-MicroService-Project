@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: API-GATEWAY
+eureka:
+  instance:
+    client:
+      serverUrl:
+        defaultZone=http://localhost:8071/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    
+        
+        
+      

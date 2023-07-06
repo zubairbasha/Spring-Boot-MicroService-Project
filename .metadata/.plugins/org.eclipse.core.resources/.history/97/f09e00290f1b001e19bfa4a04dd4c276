@@ -1,0 +1,5 @@
+package com.organisationservice.controller;
+
+public class OrganisationController {
+
+}

@@ -1,0 +1,5 @@
+package com.organisationservice.dto;
+
+public class OrganisationDto {
+
+}

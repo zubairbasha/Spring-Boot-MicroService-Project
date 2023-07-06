@@ -1,0 +1,8 @@
+package com.organisationservice.service;
+
+import com.organisationservice.dto.OrganisationDto;
+
+public interface OrganisationService {
+	OrganisationDto saveOrganisation(OrganisationDto organisation);
+	OrganisationDto getOrganisation(String organisationCode);
+}

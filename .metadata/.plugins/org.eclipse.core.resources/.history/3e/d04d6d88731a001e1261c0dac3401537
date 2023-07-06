@@ -1,0 +1,101 @@
+package com.employeeservice.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.employeeservice.client.Deparmentclientservice;
+import com.employeeservice.dto.DepartmentDto;
+import com.employeeservice.dto.EmployeeDeparmentDto;
+import com.employeeservice.dto.EmployeeDto;
+import com.employeeservice.entity.Employee;
+import com.employeeservice.repository.EmployeeRepository;
+import com.employeeservice.service.EmployeeService;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+	@Autowired
+	private EmployeeRepository employeeRepository;
+//	@Autowired
+//	private RestTemplate restTemplate;
+//	@Autowired
+//	private WebClient webClient;
+	@Autowired
+	private Deparmentclientservice departmentService;
+	@Override
+	public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
+		System.out.println(employeeDto);
+		Employee employee=Employee.builder()
+				.email(employeeDto.getEmail())
+				.firstName(employeeDto.getFirstName())
+				.lastName(employeeDto.getLastName())
+				.departmentCode(employeeDto.getDepartmentCode())
+				.build();
+		Employee savedEmployee=employeeRepository.save(employee);
+		
+		return EmployeeDto.builder().email(savedEmployee.getEmail())
+				.firstName(savedEmployee.getFirstName())
+				.lastName(savedEmployee.getLastName())
+				.id(savedEmployee.getId())
+				.departmentCode(savedEmployee.getDepartmentCode())
+				.build();
+	}
+
+	@Override
+	@CircuitBreaker(name = "${spring.application.name}",fallbackMethod = "getDefaultFallBack")
+	public EmployeeDeparmentDto getEmployeeById(Long id) {
+		Employee employee=employeeRepository.findById(id).get();
+//		DepartmentDto department= restTemplate.getForObject("http://localhost:9091/api/department/getdepartment/"+employee.getDepartmentCode(), 
+//				DepartmentDto.class);
+//		DepartmentDto department =
+//				webClient.get().uri("http://localhost:9091/api/department/getdepartment/"+
+//						employee.getDepartmentCode())
+//			.retrieve()
+//			.bodyToMono(DepartmentDto.class)
+//			.block();
+		DepartmentDto department=departmentService.getDepartment(employee.getDepartmentCode());
+				
+		EmployeeDto employeeDto=EmployeeDto.builder()
+				.id(employee.getId())
+				.email(employee.getEmail())
+				.firstName(employee.getFirstName())
+				.lastName(employee.getLastName())
+				.departmentCode(employee.getDepartmentCode())
+				.build();
+		return EmployeeDeparmentDto.builder()
+				.departmentDto(department)
+				.employeeDto(employeeDto)
+				.build();
+	}
+	
+	public EmployeeDeparmentDto getDefaultFallBack(Long id,Throwable th) {
+		Employee employee=employeeRepository.findById(id).get();
+//		DepartmentDto department= restTemplate.getForObject("http://localhost:9091/api/department/getdepartment/"+employee.getDepartmentCode(), 
+//				DepartmentDto.class);
+//		DepartmentDto department =
+//				webClient.get().uri("http://localhost:9091/api/department/getdepartment/"+
+//						employee.getDepartmentCode())
+//			.retrieve()
+//			.bodyToMono(DepartmentDto.class)
+//			.block();
+		DepartmentDto department=DepartmentDto.builder()
+				.departmentCode("SERVICE IS UNAVAILABLE")
+				.departmentDescription("SERVICE IS UNAVAIABLE")
+				.departmentName("SERVICE IS UNAVAILABLE")
+				.build();
+				
+		EmployeeDto employeeDto=EmployeeDto.builder()
+				.id(employee.getId())
+				.email(employee.getEmail())
+				.firstName(employee.getFirstName())
+				.lastName(employee.getLastName())
+				.departmentCode(employee.getDepartmentCode())
+				.build();
+		return EmployeeDeparmentDto.builder()
+				.departmentDto(department)
+				.employeeDto(employeeDto)
+				.build();
+	}
+}
